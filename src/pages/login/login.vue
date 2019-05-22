@@ -19,7 +19,7 @@ export default {
 
   },
   mounted(){
-    var obj = new WxLogin({
+  //href必须base64处理一些样式   var obj = new WxLogin({
       self_redirect:false,
       id:"iframeWrap",
       appid: "wxd4eeb52e7af72d3c",

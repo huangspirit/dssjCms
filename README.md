@@ -1,11 +1,8 @@
-最近一直在研究使用vue做出来一些东西，但都是SPA的单页面应用，但实际工作中，单页面并不一定符合业务需求，所以这篇我就来说说怎么开发多页面的Vue应用，以及在这个过程会遇到的问题。
+# 多页面的Vue应用
+#### 用户微信扫码登录后可以管理自己发布的视频，并且可以发布视频到抖手视界上
+## 准备工作
 
-
-# 准备工作
-
-在本地用`vue-cli`新建一个项目，这个步骤vue的官网上有，我就不再说了。
-
-这里有一个地方需要改一下，在执行`npm install`命令之前，在`package.json`里添加一个依赖,后面会用到。
+在执行`npm install`命令之前，在`package.json`里添加一个依赖,后面会用到。
 
 ![](http://onsmpwfeh.bkt.clouddn.com/15058154261893.jpg)
 
@@ -35,12 +32,12 @@
 │   │   └── logo.png
 │   ├── components
 │   │   ├── Hello.vue
-│   │   └── cell.vue
+│   │   └── uploadvideo.vue
 │   └── pages
-│       ├── cell
-│       │   ├── cell.html
-│       │   ├── cell.js
-│       │   └── cell.vue
+│       ├── uploadvideo
+│       │   ├── uploadvideo.html
+│       │   ├── uploadvideo.js
+│       │   └── uploadvideo.vue
 │       └── index
 │           ├── index.html
 │           ├── index.js
@@ -445,12 +442,12 @@ module.exports = webpackConfig
 │   │   └── logo.png
 │   ├── components
 │   │   ├── Hello.vue
-│   │   └── cell.vue
+│   │   └── uploadvideo.vue
 │   └── pages
-│       ├── cell
-│       │   ├── cell.html
-│       │   ├── cell.js
-│       │   └── cell.vue
+│       ├── uploadvideo
+│       │   ├── uploadvideo.html
+│       │   ├── uploadvideo.js
+│       │   └── uploadvideo.vue
 │       └── index
 │           ├── index.html
 │           ├── index.js
@@ -463,24 +460,24 @@ module.exports = webpackConfig
 
 前两个就不多说，主要是页面文件里，我目前是按照项目的模块分的文件夹，你也可以按照你自己的需求调整。然后在每个模块里又有三个内容：vue文件，js文件和html文件。这三个文件的作用就相当于做spa单页面应用时，根目录的`index.html`页面模板，src文件下的`main.js`和`app.vue`的功能。
 
-原先，入口文件只有一个main.js,但现在由于是多页面，因此入口页面多了，我目前就是两个：index和cell，之后如果打包，就会在`dist`文件下生成两个HTML文件：`index.html`和`cell.html`(可以参考一下单页面应用时，打包只会生成一个index.html,区别在这里)。
+原先，入口文件只有一个main.js,但现在由于是多页面，因此入口页面多了，我目前就是两个：index和uploadvideo，之后如果打包，就会在`dist`文件下生成两个HTML文件：`index.html`和`uploadvideo.html`(可以参考一下单页面应用时，打包只会生成一个index.html,区别在这里)。
 
-cell文件下的三个文件，就是一般模式的配置，参考index的就可以，但并不完全相同。
+uploadvideo文件下的三个文件，就是一般模式的配置，参考index的就可以，但并不完全相同。
 
 # 特别注意的地方
 
-## cell.js
+## uploadvideo.js
 
 在这个文件里，按照写法，应该是这样的吧：
 
 ```javascript
 import Vue from 'Vue'
-import cell from './cell.vue'
+import uploadvideo from './uploadvideo.vue'
 
 new Vue({
-    el:'#app'，// 这里参考cell.html和cell.vue的根节点id，保持三者一致
-    teleplate：'<cell/>',
-    components:{ cell }
+    el:'#app'，// 这里参考uploadvideo.html和uploadvideo.vue的根节点id，保持三者一致
+    teleplate：'<uploadvideo/>',
+    components:{ uploadvideo }
 })
 ```
 
@@ -502,16 +499,16 @@ new Vue({
 resolve: { alias: { 'vue': 'vue/dist/vue.js' } }
 ```
 
-这里是修改`package.json`的resolve下的vue的配置，很多人反应这样修改之后就好了，但是我按照这个方法修改之后依然报错。然后我就想到上面提到的`render`函数，因此我的修改是针对`cell.js`文件的。
+这里是修改`package.json`的resolve下的vue的配置，很多人反应这样修改之后就好了，但是我按照这个方法修改之后依然报错。然后我就想到上面提到的`render`函数，因此我的修改是针对`uploadvideo.js`文件的。
 
 ```javascript
 import Vue from 'Vue'
-import cell from './cell.vue'
+import uploadvideo from './uploadvideo.vue'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  render: h => h(cell)
+  render: h => h(uploadvideo)
 })
 
 ```
@@ -520,13 +517,13 @@ new Vue({
 
 ## 页面跳转
 
-既然是多页面，肯定涉及页面之间的互相跳转，就按照我这个项目举例，从index.html文件点击a标签跳转到cell.html。
+既然是多页面，肯定涉及页面之间的互相跳转，就按照我这个项目举例，从index.html文件点击a标签跳转到uploadvideo.html。
 
 我最开始写的是：
 
 ```html
  <!-- index.html -->
-<a href='../cell/cell.html'></a>
+<a href='../uploadvideo/uploadvideo.html'></a>
 ```
 
 但这样写，不论是在开发环境还是最后测试，都会报404，找不到这个页面。
@@ -535,10 +532,10 @@ new Vue({
 
 ```html
  <!-- index.html -->
-<a href='cell.html'></a>
+<a href='uploadvideo.html'></a>
 ```
 
-这样他就会自己找`cell.html`这个文件。
+这样他就会自己找`uploadvideo.html`这个文件。
 
 ## 打包后的资源路径
 
@@ -551,7 +548,7 @@ new Vue({
 │   ├── js
 │   ├── css
 │   ├── index.html
-│   └── cell.html
+│   └── uploadvideo.html
 ```
 
 查看index.html文件之后会发现资源的引用路径是：
