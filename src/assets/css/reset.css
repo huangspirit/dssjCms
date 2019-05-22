@@ -1,0 +1,65 @@
+
+/*字体的一些设置*/
+body,html {
+    font-family: "Helvetica Neue",tahoma,Helvetica,Arial,"microsoft yahei",sans-serif;
+    margin:0;
+    padding:0;
+    width:100%;
+    background:#f5f5f5;
+    height:100%;
+}
+a{
+  color: #333;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: none;
+}
+ul,ol,li{
+  list-style-type: none;
+}
+img{
+  vertical-align: middle;
+}
+   *{
+     padding:0;
+     margin:0;
+   }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .right:after{
+            content: "";
+            display: none;
+            clear: both;
+        }
+        .relative{
+            position: relative;
+        }
+        .textRight{
+            text-align: right;
+        }
+        .textCenter{
+            text-align: center;
+        }
+        .clearfix:after{
+            content:"";
+            display:none;
+            clear: both;
+        }
+        input{
+          border:0;
+          outline: medium;
+        }
+        textarea{
+          border:0;
+          outline: medium;
+        }
+.clearfix:after{
+    content: "";
+    display: block;
+    clear: both;
+}
